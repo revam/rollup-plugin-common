@@ -1,0 +1,22 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Microsoft/web-build-tools/master/apps/api-extractor/src/schemas/api-extractor.schema.json",
+  "docModel": {
+    "enabled": true,
+    "apiJsonFilePath": "<projectFolder>/dist/tsdoc-api.api.json"
+  },
+  "tsdocMetadata": {
+    "enabled": true,
+    "tsdocMetadataFilePath": "<projectFolder>/dist/tsdoc-metadata.json"
+  },
+  "apiReport": {
+    "enabled": true,
+    "reportFileName": "package.api.md",
+    "reportFolder": "<projectFolder>",
+    "reportTempFolder": "<projectFolder>/dist"
+  },
+  "dtsRollup": {
+    "enabled": true,
+    "untrimmedFilePath": "<projectFolder>/dist/package/index.d.ts"
+  },
+  "mainEntryPointFilePath": "dist/src/main.d.ts"
+}

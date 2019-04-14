@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.build.json",
+  "compilerOptions": {
+    "emitDeclarationOnly": true,
+    "removeComments": false
+  },
+  "exclude": [
+    "config/**/*",
+    "dist/**/*",
+    "**/*.api.ts",
+    "**/*.spec.ts",
+  ]
+}

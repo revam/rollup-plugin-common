@@ -1,0 +1,53 @@
+{
+  "name": "@revam/rollup-plugin-common",
+  "description": "Revam's common tasks for rollup in a single plugin",
+  "version": "1.0.0",
+  "private": true,
+  "license": "ISC",
+  "author": "Mikal Stordal <mikalstordal@gmail.com>",
+  "engines": {
+    "node": ">=10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/revam/rollup-plugin-common/common.git"
+  },
+  "homepage": "https://github.com/revam/rollup-plugin-common/common/tree/master#readme",
+  "bugs": {
+    "url": "https://github.com/revam/rollup-plugin-common/common/issues"
+  },
+  "keywords": [
+    "rollup",
+    "rollup-plugin",
+    "plugin",
+    "typescript"
+  ],
+  "dependencies": {
+    "read-pkg": "^4.0.1",
+    "write-pkg": "^3.2.0"
+  },
+  "devDependencies": {
+    "@microsoft/api-extractor": "^7.0.17",
+    "@types/node": "^11.9.5",
+    "rollup": "^1.2.3",
+    "tslint": "^5.12.1",
+    "typescript": "^3.4.3"
+  },
+  "peerDependencies": {
+    "rollup": "^1.0.0"
+  },
+  "scripts": {
+    "api-extractor:local": "api-extractor run -l",
+    "api-extractor": "api-extractor run",
+    "build": "npm run cleanup && npm run lint && npm run api-extractor && npm run rollup && npm pack ./dist/package",
+    "cleanup": "rm -rf dist",
+    "lint": "tslint -p .",
+    "preapi-extractor:local": "npm run tsc:d.ts",
+    "preapi-extractor": "npm run tsc:d.ts",
+    "prerollup": "npm run tsc:js",
+    "rollup": "rollup -c dist/config/rollup.config.js",
+    "tsc": "tsc -p tsconfig.build.json",
+    "tsc:d.ts": "tsc -p tsconfig.build.d.ts.json",
+    "tsc:js": "tsc -p tsconfig.build.js.json"
+  }
+}

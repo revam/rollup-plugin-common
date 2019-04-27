@@ -35,6 +35,9 @@ export interface PackageOptions {
     pick?: string[];
 }
 
+// @public
+export function readPackage<T extends object = Record<string, any>>(folder?: string): T | never;
+
 
 // (No @packageDocumentation comment for this package)
 

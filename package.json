@@ -1,7 +1,7 @@
 {
   "name": "@revam/rollup-plugin-common",
   "description": "Revam's common tasks for rollup in a single plugin",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "license": "ISC",
   "author": "Mikal Stordal <mikalstordal@gmail.com>",

@@ -263,6 +263,8 @@ export default function common(options: Options = {}): Plugin {
   };
 }
 
+export { read as readPackage } from "./package";
+
 /**
  * Iterate path and report findings.
  *

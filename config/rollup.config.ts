@@ -21,8 +21,8 @@ const options: RollupOptions = {
   output: output as any,
   plugins: [
     common({
-      // Copy these files.
-      copyFiles: {
+      // Copy assets
+      copyAssets: {
         files: [
           "changelog.md",
           "license.txt",
@@ -80,6 +80,19 @@ const options: RollupOptions = {
           "repository",
           "version",
         ],
+      },
+      // Replace text with regular expressions
+      replace: {
+        simple: {
+          '\\\${"(\\w+)"}': "$1",
+        },
+        // Same as above, but as a normal pattern instead.
+        // patterns: [
+        //   {
+        //     regex: /\${"(\w+)"}/g,
+        //     replace: "$1",
+        //   },
+        // ],
       },
       // Generate banner in emitted files.
       useBanner: true,

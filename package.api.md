@@ -12,22 +12,17 @@ function common(options?: Options): Plugin;
 export default common;
 
 // @public
-export interface CopyFilesOptions {
+export interface CopyAssetsOptions {
     files: Array<string | [string, string]>;
     force?: boolean;
     input?: string;
 }
 
-// @public
-export interface Options {
-    copyFiles?: CopyFilesOptions;
-    package?: boolean | PackageOptions;
-    useBanner?: boolean;
-    verbose?: boolean;
-}
+// @public @deprecated
+export type CopyFilesOptions = CopyAssetsOptions;
 
 // @public
-export interface PackageOptions {
+export interface GeneratePackageOptions {
     content?: Record<string, any>;
     dependencies?: string[];
     input?: string;
@@ -36,7 +31,36 @@ export interface PackageOptions {
 }
 
 // @public
+export interface Options {
+    copyAssets?: CopyAssetsOptions;
+    // @deprecated
+    copyFiles?: CopyAssetsOptions;
+    package?: boolean | GeneratePackageOptions;
+    replace?: ReplaceOptions;
+    useBanner?: boolean;
+    verbose?: boolean;
+}
+
+// @public @deprecated
+export type PackageOptions = GeneratePackageOptions;
+
+// @public
 export function readPackage<T extends object = Record<string, any>>(folder?: string): T | never;
+
+// @public
+export interface ReplaceOptions {
+    exclude?: string | string[];
+    include?: string | string[];
+    patterns?: ReplacePattern[];
+    simple?: Record<string, string>;
+}
+
+// @public
+export interface ReplacePattern {
+    filter?: string | RegExp | ((id: string) => boolean);
+    regex: string | RegExp;
+    replace: string | ((result: RegExpExecArray) => string);
+}
 
 
 // (No @packageDocumentation comment for this package)

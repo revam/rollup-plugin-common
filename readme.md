@@ -20,6 +20,8 @@ below.
 
 - Append an auto-generated banner in each chunk emitted by rollup.
 
+- Replace text with regular expressions.
+
 ## Acknowledgements
 
 This work is based on existing plugins, listed below. If you use this
@@ -28,6 +30,7 @@ me to create this by staring them on github or simular:
 
 - [rollup-plugin-copy-assets](https://github.com/bengsfort/rollup-plugin-copy-assets)
 - [rollup-plugin-generate-package-json](https://github.com/VladShcherbin/rollup-plugin-generate-package-json)
+- [rollup-plugin-re](https://github.com/jetiny/rollup-plugin-re)
 
 ## Usage
 

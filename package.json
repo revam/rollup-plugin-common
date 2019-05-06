@@ -1,7 +1,7 @@
 {
   "name": "@revam/rollup-plugin-common",
   "description": "Revam's common tasks for rollup in a single plugin",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "private": true,
   "license": "ISC",
   "author": "Mikal Stordal <mikalstordal@gmail.com>",
@@ -10,11 +10,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/revam/rollup-plugin-common/common.git"
+    "url": "git+https://github.com/revam/rollup-plugin-common.git"
   },
-  "homepage": "https://github.com/revam/rollup-plugin-common/common/tree/master#readme",
+  "homepage": "https://github.com/revam/rollup-plugin-common/tree/master#readme",
   "bugs": {
-    "url": "https://github.com/revam/rollup-plugin-common/common/issues"
+    "url": "https://github.com/revam/rollup-plugin-common/issues"
   },
   "keywords": [
     "rollup",

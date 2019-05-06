@@ -45,7 +45,6 @@ export default function replaceFactory(options: ReplaceOptions, verbose?: boolea
       return undefined;
     }
     const magic = new MagicString(code);
-    let source = code;
     let hasReplacements = false;
     for (const pattern of patterns) {
       // Filter pattern by id
@@ -55,7 +54,7 @@ export default function replaceFactory(options: ReplaceOptions, verbose?: boolea
         }
         continue;
       }
-      let match = pattern.regex.exec(source);
+      let match = pattern.regex.exec(code);
       while (match) {
         const start = match.index;
         const end = start + match[0].length;
@@ -70,9 +69,9 @@ export default function replaceFactory(options: ReplaceOptions, verbose?: boolea
               case "$&":
                 return match![0];
               case "$`":
-                return source.slice(0, start);
+                return code.slice(0, start);
               case "$'":
-                return source.slice(end);
+                return code.slice(end);
               default:
                 const n = +m.slice(1);
                 if (n >= 1 && n < match!.length) {
@@ -89,8 +88,6 @@ export default function replaceFactory(options: ReplaceOptions, verbose?: boolea
           return this.warn("replace function should return a string");
         }
         magic.overwrite(start, end, result);
-        // Update the source when changes are made.
-        source = magic.toString();
         match = pattern.regex.global ? pattern.regex.exec(code) : null;
       }
     }

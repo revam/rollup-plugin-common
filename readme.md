@@ -34,9 +34,8 @@ me to create this by staring them on github or simular:
 
 ## Usage
 
-See this projects [rollup.config.ts](./config/rollup.config.ts) for a full
-usage example, or just include the default exported function in your plugins
-array.
+See this projects [rollup.config.ts](./config/rollup.config.ts) for a
+usage example.
 
 ## Typescript
 

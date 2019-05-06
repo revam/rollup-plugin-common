@@ -86,8 +86,8 @@ export default function common(options: Options = {}): Plugin {
     writeOuts.push(copyAssetsFactory(opts, verbose));
   }
 
-  // Generate package if options is provided and is truthy or if options is not provided
-  if (("package" in options && options.package) || options.package === undefined) {
+  // Generate package if options is truthy
+  if (options.package) {
     const opts = typeof options.package === "object" ? options.package : {};
     writeOuts.push(generatePackageJsonFactory(opts));
   }

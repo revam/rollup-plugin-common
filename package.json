@@ -1,7 +1,7 @@
 {
   "name": "@revam/rollup-plugin-common",
   "description": "Revam's common tasks for rollup in a single plugin",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "private": true,
   "license": "ISC",
   "author": "Mikal Stordal <mikalstordal@gmail.com>",
@@ -23,7 +23,7 @@
     "typescript"
   ],
   "dependencies": {
-    "magic-string": "^0.25.2",
+    "magic-string": "^0.25.4",
     "read-pkg": "^4.0.1",
     "rollup-pluginutils": "^2.6.0",
     "write-pkg": "^3.2.0"
@@ -31,12 +31,12 @@
   "devDependencies": {
     "@microsoft/api-extractor": "^7.0.17",
     "@types/node": "^11.9.5",
-    "rollup": "^1.2.3",
+    "rollup": "1.27.4",
     "tslint": "^5.12.1",
     "typescript": "^3.4.3"
   },
   "peerDependencies": {
-    "rollup": "^1.0.0"
+    "rollup": "^1.21.0"
   },
   "scripts": {
     "api-extractor:local": "api-extractor run -l",

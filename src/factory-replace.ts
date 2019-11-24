@@ -31,7 +31,7 @@ export interface ReplaceOptions {
 export default function replaceFactory(options: ReplaceOptions, verbose?: boolean): TransformHook {
   const filter = createFilter(options.include, options.exclude);
   const patterns = [...parsePatterns(options.patterns), ...parseSimplePatterns(options.simple)];
-  return async function transform(code, id): Promise<TransformSourceDescription | void> {
+  return async function transform(code, id): Promise<TransformSourceDescription | undefined> {
     if (!filter(id)) {
       if (verbose) {
         console.log("skipped transform for id %s", id); // tslint:disable-line:no-console
@@ -85,7 +85,7 @@ export default function replaceFactory(options: ReplaceOptions, verbose?: boolea
           result = pattern.replace(match);
         }
         if (typeof result !== "string") {
-          return this.warn("replace function should return a string");
+          return this.error("replace function should return a string");
         }
         magic.overwrite(start, end, result);
         match = pattern.regex.global ? pattern.regex.exec(code) : null;

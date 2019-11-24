@@ -4,11 +4,13 @@ import common from "../src/main";
 
 const output: OutputOptions[] = [
   {
+    exports: "named",
     file: "dist/package/index.js",
     format: "cjs",
     preferConst: true,
   },
   {
+    exports: "named",
     file: "dist/package/index.mjs",
     format: "esm",
     preferConst: true,
@@ -16,6 +18,15 @@ const output: OutputOptions[] = [
 ];
 
 const options: RollupOptions = {
+  external: [
+    "fs",
+    "magic-string",
+    "path",
+    "read-pkg",
+    "rollup-pluginutils",
+    "write-pkg",
+    "util",
+  ],
   input: "dist/src/main.js",
   // FIXME: Work-around for wrong type emitted by rollup package. It is valid.
   output: output as any,

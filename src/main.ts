@@ -2,13 +2,13 @@ import { dirname, resolve } from "path";
 import { Plugin, TransformHook } from "rollup";
 
 import copyAssetsFactory, { CopyAssetsOptions } from "./factory-copy-assets";
-import generatePackageJsonFactory, { GeneratePackageOptions } from "./factory-generate-package";
+import generatePackageJsonFactory from "./factory-generate-package";
 import replaceFactory, { ReplaceOptions } from "./factory-replace";
+import { generatePackageObject, GeneratePackageOptions } from "./generate-package-object";
 import { WriteBundleFunction } from "./main.private";
-import { read } from "./package";
 
 export { CopyAssetsOptions } from "./factory-copy-assets";
-export { GeneratePackageOptions } from "./factory-generate-package";
+export { GeneratePackageOptions } from "./generate-package-object";
 export { ReplaceOptions, ReplacePattern } from "./factory-replace";
 
 /**
@@ -94,14 +94,14 @@ export default function common(options: Options = {}): Plugin {
 
   // Add banner
   if (options.useBanner) {
-    const pkg = read(typeof options.package === "object" ? options.package.input : undefined);
+    const pkg = generatePackageObject(typeof options.package === "object" ? options.package : undefined);
     intro = () => `/**
-* ${pkg.description || ""}.
+* ${pkg.description || ""}
 *
 * @package ${pkg.name || "<unknown>"}
 * @version ${pkg.version || "0.0.0"}
 * @homepage ${pkg.homepage || "none"}
-* @license ${pkg.license || "unknown"}
+* @license ${pkg.license || "unlicensed"}
 */`;
   }
 

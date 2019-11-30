@@ -24,12 +24,12 @@ const options: RollupOptions = {
     "path",
     "read-pkg",
     "rollup-pluginutils",
+    "stream",
     "write-pkg",
     "util",
   ],
   input: "dist/src/main.js",
-  // FIXME: Work-around for wrong type emitted by rollup package. It is valid.
-  output: output as any,
+  output,
   plugins: [
     common({
       // Copy assets
@@ -42,7 +42,23 @@ const options: RollupOptions = {
           // the second is relative to the output directory.
           ["dist/tsdoc-metadata.json", "tsdoc-metadata.json"],
         ],
+        // // Overwrite files that already exists in the output directory.
+        // force: true,
+        // // Input folder (defaults to current working directory if not
+        // // provided)
+        // input: ".",
       },
+      // // Create assets
+      // createAssets: {
+      //   files: {
+      //     // Value can be a string, an Uint8Array, an Iterable<Uint8Array>,
+      //     // an AsyncIterable<Uint8Array>, a Readable, or a function leading to
+      //     // any of the previously mentioned types.
+      //     "test-1.js": "process.exit(0)",
+      //   },
+      //   // Overwrite files that already exists in the output directory.
+      //   force: true,
+      // }
       // Generate package.json
       package: {
         // Set content of generated package.

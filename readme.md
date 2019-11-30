@@ -18,6 +18,8 @@ below.
 - Copy files to each output directory. Supports copying of both files and
   folders.
 
+- Create/generate files in each output directory.
+
 - Append an auto-generated banner in each chunk emitted by rollup.
 
 - Replace text with regular expressions.

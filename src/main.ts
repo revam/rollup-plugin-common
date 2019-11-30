@@ -2,12 +2,14 @@ import { dirname, resolve } from "path";
 import { Plugin, TransformHook } from "rollup";
 
 import copyAssetsFactory, { CopyAssetsOptions } from "./factory-copy-assets";
+import generateAssetsFactory, { GenerateAssetsOptions } from "./factory-generate-assets";
 import generatePackageJsonFactory from "./factory-generate-package";
 import replaceFactory, { ReplaceOptions } from "./factory-replace";
 import { generatePackageObject, GeneratePackageOptions } from "./generate-package-object";
 import { WriteBundleFunction } from "./main.private";
 
 export { CopyAssetsOptions } from "./factory-copy-assets";
+export { Content, GenerateAssetsOptions } from "./factory-generate-assets";
 export { GeneratePackageOptions } from "./generate-package-object";
 export { ReplaceOptions, ReplacePattern } from "./factory-replace";
 
@@ -17,10 +19,6 @@ export { ReplaceOptions, ReplacePattern } from "./factory-replace";
  * @public
  */
 export interface Options {
-  /**
-   * Use generated banner in output files.
-   */
-  useBanner?: boolean;
   /**
    * Copy assets to output directory.
    */
@@ -32,7 +30,11 @@ export interface Options {
    */
   copyFiles?: CopyAssetsOptions;
   /**
-   * Generate package configuration in output directory.
+   * Generate assets in each output directory.
+   */
+  generateAssets?: GenerateAssetsOptions;
+  /**
+   * Generate package.json in each output directory.
    */
   package?: boolean | GeneratePackageOptions;
   /**
@@ -43,6 +45,10 @@ export interface Options {
    * Be more verbose with messages when something unexpected happens.
    */
   verbose?: boolean;
+  /**
+   * Use generated banner in output files.
+   */
+  useBanner?: boolean;
 }
 
 /**
@@ -84,6 +90,11 @@ export default function common(options: Options = {}): Plugin {
   if (options.copyAssets || options.copyFiles) { // tslint:disable-line:deprecation
     const opts = (options.copyAssets || options.copyFiles) as CopyAssetsOptions; // tslint:disable-line:deprecation
     writeOuts.push(copyAssetsFactory(opts, verbose));
+  }
+
+  // Create assets
+  if (options.generateAssets) {
+    writeOuts.push(generateAssetsFactory(options.generateAssets, verbose));
   }
 
   // Generate package if options is truthy

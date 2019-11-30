@@ -1,7 +1,6 @@
-import { createReadStream, createWriteStream, readdir as READDIR, stat as STAT, Stats } from "fs";
 import { join, relative, resolve } from "path";
-import { promisify } from "util";
 
+import { copyFile, isDirectory, iteratePath, stat } from "./file-system-utils";
 import { ErrorCodes, WriteBundleFunction } from "./main.private";
 import { makeDirP } from "./make-dir-p";
 
@@ -52,7 +51,7 @@ export default function copyAssetsFactory(opts: CopyAssetsOptions, verbose?: boo
             const stats = await stat(result.output);
             if (stats) {
               if (!stats.isDirectory()) {
-                return this.warn(`Cannot add entries to path "${result.output}" (code: ${ErrorCodes.Directory})`);
+                return this.warn(`Cannot add entries to path "${result.output}" (code: ${ErrorCodes.DirectoryExpected})`);
               }
             }
             else {
@@ -62,20 +61,20 @@ export default function copyAssetsFactory(opts: CopyAssetsOptions, verbose?: boo
           // Copy file
           else if (result.type === "file") {
             const stats = await stat(result.output);
-            if (stats) {
-              if (stats.isDirectory()) {
-                return this.warn(`Cannot write asset "${result.output}". (code: ${ErrorCodes.NoDirectory})`);
-              }
-              // Force if asset exist
-              if (force && stats.isFile()) {
+            if (!stats) {
+              promises.push(copyFile(result.input, result.output));
+            }
+            // It is possible to force if a file already exist
+            else if (stats.isFile()) {
+              if (force) {
                 promises.push(copyFile(result.input, result.output));
               }
               else if (verbose) {
-                return this.warn(`Cannot write asset "${result.output}". (code: ${ErrorCodes.Exists})`);
+                return this.warn(`Cannot write asset "${result.output}". (code: ${ErrorCodes.FileExists})`);
               }
             }
-            else {
-              promises.push(copyFile(result.input, result.output));
+            else if (verbose) {
+              return this.warn(`Cannot write asset "${result.output}". (code: ${ErrorCodes.FileExpected})`);
             }
           }
           else if (verbose) {
@@ -90,53 +89,3 @@ export default function copyAssetsFactory(opts: CopyAssetsOptions, verbose?: boo
     }
   };
 }
-
-/**
- * Iterate path and report findings.
- *
- * @param input - Input path to iterate.
- * @param output - Equivalent path for output.
- */
-async function* iteratePath(input: string, output: string): AsyncIterableIterator<PathInfo> {
-  const stats = await stat(input);
-  if (stats) {
-    if (stats.isFile()) {
-      yield { type: "file", input, output };
-    }
-    else if (stats.isDirectory()) {
-      yield { type: "directory", output };
-      const entries = await readDir(input);
-      for (const entry of entries) {
-        yield* iteratePath(join(input, entry), join(output, entry));
-      }
-    }
-    else {
-      yield { type: "unknown", input, code: ErrorCodes.Unsupported };
-    }
-  }
-  else {
-    yield { type: "unknown", input, code: ErrorCodes.NotFound };
-  }
-}
-
-async function copyFile(input: string, output: string): Promise<void> {
-  return new Promise((onClose, onError) => {
-    const readStream = createReadStream(input, { autoClose: true });
-    const writeStream = createWriteStream(output, { autoClose: true });
-    writeStream.on("close", onClose);
-    writeStream.on("error", onError);
-    readStream.pipe(writeStream);
-  });
-}
-
-const readDir = promisify(READDIR);
-const readStat = promisify(STAT);
-
-const stat = async (path: string): Promise<Stats | undefined> => readStat(path).catch(() => undefined);
-const isDirectory = async (path: string): Promise<boolean> => readStat(path).then((s) => s.isDirectory()).catch(() => false);
-
-type PathInfo =
-| { type: "file"; input: string; output: string }
-| { type: "directory"; output: string }
-| { type: "unknown"; input: string; code: ErrorCodes }
-;

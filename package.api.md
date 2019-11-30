@@ -5,11 +5,15 @@
 ```ts
 
 import { Plugin } from 'rollup';
+import { Readable } from 'stream';
 
 // @public
 function common(options?: Options): Plugin;
 
 export default common;
+
+// @public
+export type Content = string | Uint8Array | Readable | Iterable<Uint8Array> | AsyncIterable<Uint8Array> | (() => Content);
 
 // @public
 export interface CopyAssetsOptions {
@@ -20,6 +24,12 @@ export interface CopyAssetsOptions {
 
 // @public @deprecated
 export type CopyFilesOptions = CopyAssetsOptions;
+
+// @public
+export interface GenerateAssetsOptions {
+    files: Record<string, Content>;
+    force?: boolean;
+}
 
 // @public
 export interface GeneratePackageOptions {
@@ -35,6 +45,7 @@ export interface Options {
     copyAssets?: CopyAssetsOptions;
     // @deprecated
     copyFiles?: CopyAssetsOptions;
+    generateAssets?: GenerateAssetsOptions;
     package?: boolean | GeneratePackageOptions;
     replace?: ReplaceOptions;
     useBanner?: boolean;

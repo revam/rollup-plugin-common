@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.3.0] - 2019-11-30
+
+### Added
+
+- Added a new property `generateAssets` to the `Options` interface for
+  generating files in each output directory, a new interface,
+  `GenerateAssetsOptions`, to contain the options of `Options.generateAssets`,
+  and a new type, `Content`, to describe the content allowed to generate files.
+
+### Updated
+
+- Updated error messages.
+
 ## [1.2.2] - 2019-11-24
 
 ### Fixed
@@ -83,7 +96,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Initial public release
 
-[Unreleased]: https://github.com/revam/rollup-plugin-common/compare/v1.2.2...HEAD
+[Unreleased]: https://github.com/revam/rollup-plugin-common/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/revam/rollup-plugin-common/compare/v1.2.2...v1.3.0
 [1.2.2]: https://github.com/revam/rollup-plugin-common/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/revam/rollup-plugin-common/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/revam/rollup-plugin-common/compare/v1.1.0...v1.2.0

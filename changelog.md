@@ -7,9 +7,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.3.2] - 2019-12-01
+
+### Fixed
+
+- Don't create folder structure for file if file is skipped in file generation.
+
 ## [1.3.1] - 2019-12-01
 
-## Added
+### Added
 
 - Allow skipping the generation of a file by providing `null` or `undefined` as
   the `Content` and value of keys in `Options.generateAssets.files`.
@@ -114,7 +120,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Initial public release
 
-[Unreleased]: https://github.com/revam/rollup-plugin-common/compare/v1.3.1...HEAD
+[Unreleased]: https://github.com/revam/rollup-plugin-common/compare/v1.3.2...HEAD
+[1.3.2]: https://github.com/revam/rollup-plugin-common/compare/v1.3.1...v1.3.2
 [1.3.1]: https://github.com/revam/rollup-plugin-common/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/revam/rollup-plugin-common/compare/v1.2.2...v1.3.0
 [1.2.2]: https://github.com/revam/rollup-plugin-common/compare/v1.2.1...v1.2.2

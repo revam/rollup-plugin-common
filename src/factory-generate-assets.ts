@@ -52,8 +52,14 @@ export default function generateAssetsFactory(opts: GenerateAssetsOptions, verbo
       const promises: Array<Promise<any>> = [];
       await Promise.all(Object.entries(files).map(async ([name, content]) => {
         const output = join(outputFolder, name);
+        const stream = await __convertToReadable(content);
+        // Skip write if stream is falsely
+        if (!stream) {
+          // Not really a warning, but more like a debug/verbose message, so
+          // treat as a warning until rollup allows for easy verbose logging.
+          return this.warn(`Skipped file "${output}" (code: ${MessageCode.FileSkipped})`);
+        }
         const dirnameOfOutput = dirname(output);
-
         let stats = await stat(dirnameOfOutput);
         if (stats) {
           if (!stats.isDirectory()) {
@@ -62,14 +68,6 @@ export default function generateAssetsFactory(opts: GenerateAssetsOptions, verbo
         }
         else {
           await makeDirP(dirnameOfOutput);
-        }
-
-        const stream = await __convertToReadable(content);
-        // Skip write if stream is falsely
-        if (!stream) {
-          // Not really a warning, but more like a debug/verbose message, so
-          // treat as a warning until rollup allows for easy verbose logging.
-          return this.warn(`Skipped file "${output}" (code. ${MessageCode.FileSkipped})`);
         }
         stats = await stat(output);
         if (!stats) {

@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.3.1] - 2019-12-01
+
+## Added
+
+- Allow skipping the generation of a file by providing `null` or `undefined` as
+  the `Content` and value of keys in `Options.generateAssets.files`.
+
+- Resolve promise-like objects leading to `Content` as the return value of the
+  function type defined in `Content`. Meaning functions can now be async, or
+  otherwise return promise-like values.
+
+### Updated
+
+- Updated error messages.
+
+- Updated dependencies "typescript", "tslint" and "@microsoft/api-extractor" to
+  their latest release.
+
 ## [1.3.0] - 2019-11-30
 
 ### Added
@@ -96,7 +114,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Initial public release
 
-[Unreleased]: https://github.com/revam/rollup-plugin-common/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/revam/rollup-plugin-common/compare/v1.3.1...HEAD
+[1.3.1]: https://github.com/revam/rollup-plugin-common/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/revam/rollup-plugin-common/compare/v1.2.2...v1.3.0
 [1.2.2]: https://github.com/revam/rollup-plugin-common/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/revam/rollup-plugin-common/compare/v1.2.0...v1.2.1

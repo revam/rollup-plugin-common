@@ -3,7 +3,7 @@ import { join } from "path";
 import { Readable } from "stream";
 import { promisify } from "util";
 
-import { ErrorCodes } from "./main.private";
+import { MessageCode } from "./main.private";
 
 const readDir = promisify(READDIR);
 const readStat = promisify(STAT);
@@ -47,11 +47,11 @@ export async function* iteratePath(input: string, output: string): AsyncIterable
       }
     }
     else {
-      yield { type: "unknown", input, code: ErrorCodes.Unsupported };
+      yield { type: "unknown", input, code: MessageCode.Unsupported };
     }
   }
   else {
-    yield { type: "unknown", input, code: ErrorCodes.NotFound };
+    yield { type: "unknown", input, code: MessageCode.NotFound };
   }
 }
 
@@ -61,5 +61,5 @@ export const isDirectory = async (path: string): Promise<boolean> => readStat(pa
 export type PathInfo =
 | { type: "file"; input: string; output: string }
 | { type: "directory"; output: string }
-| { type: "unknown"; input: string; code: ErrorCodes }
+| { type: "unknown"; input: string; code: MessageCode }
 ;

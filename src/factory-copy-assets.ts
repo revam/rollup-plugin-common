@@ -1,7 +1,7 @@
 import { join, relative, resolve } from "path";
 
 import { copyFile, isDirectory, iteratePath, stat } from "./file-system-utils";
-import { ErrorCodes, WriteBundleFunction } from "./main.private";
+import { MessageCode, WriteBundleFunction } from "./main.private";
 import { makeDirP } from "./make-dir-p";
 
 /**
@@ -51,7 +51,7 @@ export default function copyAssetsFactory(opts: CopyAssetsOptions, verbose?: boo
             const stats = await stat(result.output);
             if (stats) {
               if (!stats.isDirectory()) {
-                return this.warn(`Cannot add entries to path "${result.output}" (code: ${ErrorCodes.DirectoryExpected})`);
+                return this.warn(`Cannot add entries to path "${result.output}" (code: ${MessageCode.DirectoryExpected})`);
               }
             }
             else {
@@ -70,11 +70,11 @@ export default function copyAssetsFactory(opts: CopyAssetsOptions, verbose?: boo
                 promises.push(copyFile(result.input, result.output));
               }
               else if (verbose) {
-                return this.warn(`Cannot write asset "${result.output}". (code: ${ErrorCodes.FileExists})`);
+                return this.warn(`Cannot write file "${result.output}". (code: ${MessageCode.FileExists})`);
               }
             }
             else if (verbose) {
-              return this.warn(`Cannot write asset "${result.output}". (code: ${ErrorCodes.FileExpected})`);
+              return this.warn(`Cannot write file "${result.output}". (code: ${MessageCode.FileExpected})`);
             }
           }
           else if (verbose) {

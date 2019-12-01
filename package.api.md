@@ -13,7 +13,7 @@ function common(options?: Options): Plugin;
 export default common;
 
 // @public
-export type Content = string | Uint8Array | Readable | Iterable<Uint8Array> | AsyncIterable<Uint8Array> | (() => Content);
+export type Content = string | Uint8Array | Readable | Iterable<Uint8Array> | AsyncIterable<Uint8Array> | (() => Content | PromiseLike<Content>) | null | undefined;
 
 // @public
 export interface CopyAssetsOptions {

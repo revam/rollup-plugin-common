@@ -2,7 +2,7 @@ import { dirname, join } from "path";
 import { Readable } from "stream";
 
 import { isDirectory, stat, writeFile } from "./file-system-utils";
-import { ErrorCodes, WriteBundleFunction } from "./main.private";
+import { MessageCode, WriteBundleFunction } from "./main.private";
 import { makeDirP } from "./make-dir-p";
 
 /**
@@ -27,11 +27,22 @@ export interface GenerateAssetsOptions {
  * @remarks
  *
  * Can be a string, an array-buffer, a stream-like object, or a function
- * providing some {@link (Content:type) | content}.
+ * returning some {@link (Content:type) | content} or a promise-like object
+ * leading to some {@link (Content:type) | content}.
+ *
+ * If content is `null` or `undefined`, then the file will not be written.
  *
  * @public
  */
-export type Content = string | Uint8Array | Readable | Iterable<Uint8Array> | AsyncIterable<Uint8Array> | (() => Content);
+export type Content =
+  | string
+  | Uint8Array
+  | Readable
+  | Iterable<Uint8Array>
+  | AsyncIterable<Uint8Array>
+  | (() => Content | PromiseLike<Content>)
+  | null
+  | undefined;
 
 export default function generateAssetsFactory(opts: GenerateAssetsOptions, verbose?: boolean): WriteBundleFunction {
   const files = opts.files || [];
@@ -46,14 +57,20 @@ export default function generateAssetsFactory(opts: GenerateAssetsOptions, verbo
         let stats = await stat(dirnameOfOutput);
         if (stats) {
           if (!stats.isDirectory()) {
-            return this.warn(`Cannot add entries to path "${dirnameOfOutput}" (code: ${ErrorCodes.DirectoryExpected})`);
+            return this.warn(`Cannot add entries to path "${dirnameOfOutput}" (code: ${MessageCode.DirectoryExpected})`);
           }
         }
         else {
           await makeDirP(dirnameOfOutput);
         }
 
-        const stream = __convertToReadable(content);
+        const stream = await __convertToReadable(content);
+        // Skip write if stream is falsely
+        if (!stream) {
+          // Not really a warning, but more like a debug/verbose message, so
+          // treat as a warning until rollup allows for easy verbose logging.
+          return this.warn(`Skipped file "${output}" (code. ${MessageCode.FileSkipped})`);
+        }
         stats = await stat(output);
         if (!stats) {
           promises.push(writeFile(stream, output));
@@ -64,11 +81,11 @@ export default function generateAssetsFactory(opts: GenerateAssetsOptions, verbo
             promises.push(writeFile(stream, output));
           }
           else if (verbose) {
-            return this.warn(`Cannot write asset "${output}". (code: ${ErrorCodes.FileExists})`);
+            return this.warn(`Cannot write file "${output}". (code: ${MessageCode.FileExists})`);
           }
         }
         else if (verbose) {
-          return this.warn(`Cannot write asset "${output}". (code: ${ErrorCodes.FileExpected})`);
+          return this.warn(`Cannot write file "${output}". (code: ${MessageCode.FileExpected})`);
         }
       }));
       // Await extra promises if registered.
@@ -82,7 +99,10 @@ export default function generateAssetsFactory(opts: GenerateAssetsOptions, verbo
 declare const TextEncoder: typeof import("util").TextEncoder;
 const ENCODER = new TextEncoder();
 
-function __convertToReadable(content: Content): Readable {
+async function __convertToReadable(content: Content | PromiseLike<Content>): Promise<Readable | undefined> {
+  if (content === null || content === undefined) {
+    return undefined;
+  }
   switch (typeof content) {
     case "function":
       return __convertToReadable(content());
@@ -96,11 +116,17 @@ function __convertToReadable(content: Content): Readable {
       if (content instanceof Uint8Array) {
         content = __thenable(content);
       }
-      if (content) {
-        return Readable.from(content, { objectMode: false });
+      if (__isThenable<Content>(content)) {
+        return __convertToReadable(await content);
       }
-    }
+      return Readable.from(content, { objectMode: false });
+  }
   throw new Error("Unsupported value not part of the `Content` type definition provided.");
+}
+
+function __isThenable<T>(target: object): target is PromiseLike<T> {
+  // tslint:disable-next-line:no-string-literal
+  return typeof target["then"] === "function";
 }
 
 function* __thenable(content: Uint8Array): IterableIterator<Uint8Array> {
